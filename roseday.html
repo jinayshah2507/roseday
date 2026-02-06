@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Rose Day ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Playfair Display', serif;
+}
+
+body{
+  min-height:100vh;
+  background:radial-gradient(circle at top,#2b0a16,#050002);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  color:#fff;
+}
+
+/* Floating particles */
+.particle{
+  position:absolute;
+  width:4px;
+  height:4px;
+  background:rgba(255,105,135,0.6);
+  border-radius:50%;
+  animation:float 12s linear infinite;
+}
+
+@keyframes float{
+  0%{transform:translateY(100vh);opacity:0;}
+  30%{opacity:1;}
+  100%{transform:translateY(-10vh);opacity:0;}
+}
+
+/* Card */
+.card{
+  text-align:center;
+  background:rgba(255,255,255,0.05);
+  padding:40px 30px;
+  border-radius:20px;
+  backdrop-filter:blur(10px);
+  box-shadow:0 0 40px rgba(255,0,80,0.25);
+  width:90%;
+  max-width:420px;
+  position:relative;
+  z-index:2;
+}
+
+.rose{
+  font-size:48px;
+  margin-bottom:10px;
+  animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.15);}
+}
+
+h1{
+  font-size:28px;
+  margin-bottom:10px;
+}
+
+p{
+  font-size:14px;
+  opacity:0.9;
+  margin-bottom:25px;
+}
+
+button{
+  padding:12px 28px;
+  border-radius:30px;
+  border:none;
+  background:linear-gradient(135deg,#ff4d6d,#ff758f);
+  color:#fff;
+  font-size:15px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 20px rgba(255,100,150,0.6);
+}
+
+/* Garden */
+.garden{ display:none; }
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-top:25px;
+}
+
+.flower{
+  background:rgba(255,255,255,0.08);
+  border-radius:15px;
+  padding:20px 0;
+  font-size:26px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.flower.clicked{
+  opacity:0.4;
+  pointer-events:none;
+}
+
+.flower:hover{
+  transform:scale(1.1);
+}
+
+#continueBtn{
+  display:none;
+  margin-top:25px;
+}
+
+/* Popup */
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:5;
+}
+
+.popup div{
+  background:#140006;
+  padding:30px;
+  border-radius:20px;
+  max-width:300px;
+  text-align:center;
+}
+
+/* Final slide */
+.final{
+  display:none;
+  overflow:hidden;
+}
+
+.final p{
+  font-size:18px;
+  line-height:1.6;
+}
+
+/* Heart rain */
+.heart{
+  position:fixed;
+  top:-10px;
+  font-size:20px;
+  color:#ff4d6d;
+  animation:fall linear forwards;
+  z-index:1;
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(110vh);
+    opacity:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎶 Background Music -->
+<audio id="bgMusic" loop>
+  <source src="https://pagalfree.com/musics/128-I%20Love%20You%20-%20Bodyguard%20128%20Kbps.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+for(let i=0;i<40;i++){
+  let p=document.createElement("div");
+  p.className="particle";
+  p.style.left=Math.random()*100+"vw";
+  p.style.animationDelay=Math.random()*10+"s";
+  document.body.appendChild(p);
+}
+</script>
+
+<!-- Home -->
+<div class="card" id="home">
+  <div class="rose">🌹</div>
+  <h1>Happy Rose Day,<br>My Love</h1>
+  <p>You are the most beautiful rose in the garden of my life.</p>
+  <button onclick="openGarden()">A Special Message</button>
+</div>
+
+<!-- Garden -->
+<div class="card garden" id="garden">
+  <h1>Plant a Love Garden</h1>
+
+  <div class="grid">
+    <div class="flower" onclick="showMsg(0,this)">🌹</div>
+    <div class="flower" onclick="showMsg(1,this)">❤️</div>
+    <div class="flower" onclick="showMsg(2,this)">🌷</div>
+    <div class="flower" onclick="showMsg(3,this)">💖</div>
+    <div class="flower" onclick="showMsg(4,this)">🌹</div>
+    <div class="flower" onclick="showMsg(5,this)">❤️</div>
+    <div class="flower" onclick="showMsg(6,this)">🌷</div>
+    <div class="flower" onclick="showMsg(7,this)">💖</div>
+    <div class="flower" onclick="showMsg(8,this)">🌹</div>
+  </div>
+
+  <button id="continueBtn" onclick="goFinal()">Continue ❤️</button>
+</div>
+
+<!-- Popup -->
+<div class="popup" id="popup">
+  <div>
+    <p id="popupText"></p>
+    <button onclick="closeMsg()">Close</button>
+  </div>
+</div>
+
+<!-- Final -->
+<div class="card final" id="final">
+  <div class="rose">🌹</div>
+  <p>
+    This Rose Is My Heart And It Belongs To You<br>
+    dikkii small small rabbit maaru puppiee ek nu ek..<br>
+    dikii maari..🌹
+  </p>
+</div>
+
+<script>
+const messages=[
+  "🌹 Like this rose, my love for you blooms more beautifully every day.",
+  "❤️ My heart chose you once, and it keeps choosing you every moment.",
+  "🌷 You walked into my life and turned ordinary days into poetry.",
+  "💖 Loving you is my favorite habit and my sweetest addiction.",
+  "🌹 You are the reason my heart smiles without any reason.",
+  "❤️ If love had a face, it would look exactly like you.",
+  "🌷 Every petal reminds me how soft and pure your soul is.",
+  "💖 In a world full of choices, I choose you — always.",
+  "🌹 You are not just my love, you are my forever."
+];
+
+let clickedCount=0;
+
+function openGarden(){
+  document.getElementById("bgMusic").play();
+  home.style.display="none";
+  garden.style.display="block";
+}
+
+function showMsg(i,el){
+  popupText.innerText=messages[i];
+  popup.style.display="flex";
+  if(!el.classList.contains("clicked")){
+    el.classList.add("clicked");
+    clickedCount++;
+    if(clickedCount===9){
+      continueBtn.style.display="inline-block";
+    }
+  }
+}
+
+function closeMsg(){
+  popup.style.display="none";
+}
+
+function goFinal(){
+  garden.style.display="none";
+  final.style.display="block";
+  startHeartRain();
+}
+
+/* ❤️ Heart Rain */
+function startHeartRain(){
+  setInterval(()=>{
+    let heart=document.createElement("div");
+    heart.className="heart";
+    heart.innerHTML="❤️";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.animationDuration=(3+Math.random()*3)+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),6000);
+  },300);
+}
+</script>
+
+</body>
+</html>
